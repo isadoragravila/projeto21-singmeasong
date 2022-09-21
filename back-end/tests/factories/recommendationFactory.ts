@@ -25,3 +25,14 @@ export async function createWithLowScore() {
     });
     return createdRecommendation;
 }
+
+export async function createTenPlusItems() {
+    for (let i = 0; i < 11; i++) {
+        const body = await recommendation();
+
+        await prisma.recommendation.create({
+            data: body
+        });
+    }
+    return
+}

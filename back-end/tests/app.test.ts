@@ -72,7 +72,7 @@ describe('POST /recommendations/:id/downvote', () => {
 
         expect(result.status).toBe(404);
     });
-    
+
     it('returns 200 for success in downvote', async () => {
         const music = await recommendationFactory.create();
         const { id, score } = music;
@@ -99,7 +99,25 @@ describe('POST /recommendations/:id/downvote', () => {
 
         expect(result.status).toBe(200);
         expect(recommendation).toBeNull;
-    })
+    });
+});
+
+describe('GET /recommendations', () => {
+    it('returns array for success and object in the right format', async () => {
+        const createdRecommendation = await recommendationFactory.create();
+
+        const result = await agent.get('/recommendations');
+
+        expect(result.body).toBeInstanceOf(Array);
+        expect(result.body[0]).toMatchObject(createdRecommendation);
+    });
+    it('returns array with length equal to 10', async () => {
+        await recommendationFactory.createTenPlusItems();
+
+        const result = await agent.get('/recommendations');
+
+        expect(result.body.length).toBe(10);
+    });
 });
 
 afterAll(async () => {
