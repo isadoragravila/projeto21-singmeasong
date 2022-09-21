@@ -31,7 +31,10 @@ export async function createTenPlusItems() {
         const body = await recommendation();
 
         await prisma.recommendation.create({
-            data: body
+            data: {
+                name: `${i} - ${body.name}`,
+                youtubeLink: body.youtubeLink
+            }
         });
     }
     return

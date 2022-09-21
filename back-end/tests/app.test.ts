@@ -120,6 +120,26 @@ describe('GET /recommendations', () => {
     });
 });
 
+describe('GET /recommendations/:id', () => {
+    it('returns 404 for id not found', async () => {
+        const id = 1000;
+
+        const result = await agent.get(`/recommendations/${id}`);
+
+        expect(result.status).toBe(404);
+    });
+    it('returns object in the right format for success', async () => {
+        const createdRecommendation = await recommendationFactory.create();
+
+        const { id } = createdRecommendation;
+
+        const result = await agent.get(`/recommendations/${id}`);
+
+        expect(result.body).toMatchObject(createdRecommendation);
+        expect(result.status).toBe(200);
+    })
+});
+
 afterAll(async () => {
     await prisma.$disconnect();
 });
