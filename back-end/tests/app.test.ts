@@ -140,6 +140,32 @@ describe('GET /recommendations/:id', () => {
     })
 });
 
+describe('GET /recommendations/top/:amount', () => {
+    it('returns array with the right amount', async () => {
+        const amount = 5;
+
+        await recommendationFactory.createTenPlusItems(amount);
+
+        const result = await agent.get(`/recommendations/top/${amount}`);
+
+        expect(result.body).toBeInstanceOf(Array);
+        expect(result.body.length).toBe(amount);
+    });
+
+    it('returns array in the descending order', async () => {
+        const amount = 5;
+
+        await recommendationFactory.createTenPlusItems(amount);
+
+        const result = await agent.get(`/recommendations/top/${amount}`);
+
+        expect(result.body[0].score).toBeGreaterThanOrEqual(result.body[1].score);
+        expect(result.body[1].score).toBeGreaterThanOrEqual(result.body[2].score);
+        expect(result.body[2].score).toBeGreaterThanOrEqual(result.body[3].score);
+        expect(result.body[3].score).toBeGreaterThanOrEqual(result.body[4].score);
+    });
+});
+
 afterAll(async () => {
     await prisma.$disconnect();
 });

@@ -26,14 +26,15 @@ export async function createWithLowScore() {
     return createdRecommendation;
 }
 
-export async function createTenPlusItems() {
+export async function createTenPlusItems(amount?: number) {
     for (let i = 0; i < 11; i++) {
         const body = await recommendation();
 
         await prisma.recommendation.create({
             data: {
                 name: `${i} - ${body.name}`,
-                youtubeLink: body.youtubeLink
+                youtubeLink: body.youtubeLink,
+                score: amount ? Number(faker.finance.amount(-5, 200, 0)) : 0
             }
         });
     }
