@@ -166,6 +166,22 @@ describe('GET /recommendations/top/:amount', () => {
     });
 });
 
+describe('GET /recommendations/random', () => {
+    it('returns 404 for recommendations not found', async () => {
+        const result = await agent.get('/recommendations/random');
+
+        expect(result.status).toBe(404);
+    });
+
+    it('returns object in the right format for success', async () => {
+        const createdRecommendation = await recommendationFactory.create();
+
+        const result = await agent.get('/recommendations/random');
+
+        expect(result.body).toMatchObject(createdRecommendation);
+    });
+})
+
 afterAll(async () => {
     await prisma.$disconnect();
 });
