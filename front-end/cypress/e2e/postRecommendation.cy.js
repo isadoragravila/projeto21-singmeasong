@@ -30,5 +30,7 @@ describe('Post new recommendation', () => {
     cy.wait('@getRecommendations');
 
     cy.get("[data-cy=title]").should('contain', recommendation.name);
+
+    cy.get("[data-cy=video]").should("be.visible");
   });
 });

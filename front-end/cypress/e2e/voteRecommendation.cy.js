@@ -1,5 +1,3 @@
-import { faker } from '@faker-js/faker';
-
 const URL_FRONT = "http://localhost:3000";
 const URL_BACK = "http://localhost:5000";
 
