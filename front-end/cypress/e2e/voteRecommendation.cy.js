@@ -33,4 +33,25 @@ describe('Vote recommendation', () => {
 
     cy.get("[data-cy=score]").should('contain', '-1');
   });
+
+  it('downvote: should delete recommendation when score is less than -5', () => {
+    cy.visit(URL_FRONT);
+
+    cy.createRecommendation(URL_BACK);
+
+    cy.get("[data-cy=downvote]").click();
+    cy.wait(500);
+    cy.get("[data-cy=downvote]").click();
+    cy.wait(500);
+    cy.get("[data-cy=downvote]").click();
+    cy.wait(500);
+    cy.get("[data-cy=downvote]").click();
+    cy.wait(500);
+    cy.get("[data-cy=downvote]").click();
+    cy.wait(500);
+    cy.get("[data-cy=downvote]").click();
+    cy.wait(500);
+
+    cy.get("[data-cy=emptyRecommendations]").should("be.visible");
+  })
 });
