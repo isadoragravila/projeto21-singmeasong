@@ -8,8 +8,14 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 //
-Cypress.Commands.add('createRecommendation', (recommedation, URL_BACK) => {
-    cy.request('POST', `${URL_BACK}/recommendations`, recommedation);
+import { faker } from '@faker-js/faker';
+
+Cypress.Commands.add('createRecommendation', (URL_BACK) => {
+    const recommendation = {
+        name: faker.lorem.words(5),
+        youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y"
+      }
+    cy.request('POST', `${URL_BACK}/recommendations`, recommendation);
 })
 
 
