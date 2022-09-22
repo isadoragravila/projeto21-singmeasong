@@ -32,3 +32,43 @@ describe('Post new recommendation', () => {
     cy.get("[data-cy=title]").should('contain', recommendation.name);
   });
 });
+
+describe('Vote recommendation', () => {
+  it('upvote: should increase score in 1', () => {
+    const recommendation = {
+      name: faker.lorem.words(5),
+      youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y"
+    }
+
+    cy.visit(URL_FRONT);
+
+    cy.intercept('GET', `${URL_BACK}/recommendations`).as('getRecommendations');
+
+    cy.createRecommendation(recommendation, URL_BACK);
+
+    cy.wait('@getRecommendations');
+
+    cy.get("[data-cy=upvote]").click();
+
+    cy.get("[data-cy=score]").should('contain', '1');
+  });
+  
+  it('downvote: should decrease score in 1', () => {
+    const recommendation = {
+      name: faker.lorem.words(5),
+      youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y"
+    }
+
+    cy.visit(URL_FRONT);
+
+    cy.intercept('GET', `${URL_BACK}/recommendations`).as('getRecommendations');
+
+    cy.createRecommendation(recommendation, URL_BACK);
+
+    cy.wait('@getRecommendations');
+
+    cy.get("[data-cy=downvote]").click();
+
+    cy.get("[data-cy=score]").should('contain', '-1');
+  });
+});

@@ -8,7 +8,12 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 //
-//
+Cypress.Commands.add('createRecommendation', (recommedation, URL_BACK) => {
+    cy.request('POST', `${URL_BACK}/recommendations`, recommedation);
+})
+
+
+
 // -- This is a parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
 //
