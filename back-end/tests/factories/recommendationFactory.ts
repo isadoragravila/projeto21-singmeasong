@@ -1,14 +1,14 @@
 import { faker } from '@faker-js/faker';
 import { prisma } from "../../src/database";
 
-export async function recommendation() {
+export async function recommendationBody() {
     return {
         name: faker.lorem.words(5),
         youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y"
     }
 };
 
-export async function existingRecommendation() {
+export async function recommendationData() {
     return {
         id: Number(faker.finance.amount(1, 200, 0)),
         name: faker.lorem.words(5),
@@ -18,7 +18,7 @@ export async function existingRecommendation() {
 };
 
 export async function create() {
-    const body = await recommendation();
+    const body = await recommendationBody();
 
     const createdRecommendation = await prisma.recommendation.create({
         data: body
@@ -27,7 +27,7 @@ export async function create() {
 }
 
 export async function createWithLowScore() {
-    const body = await recommendation();
+    const body = await recommendationBody();
 
     const createdRecommendation = await prisma.recommendation.create({
         data: { ...body, score: -5 }
@@ -37,7 +37,7 @@ export async function createWithLowScore() {
 
 export async function createTenPlusItems(amount?: number) {
     for (let i = 0; i < 11; i++) {
-        const body = await recommendation();
+        const body = await recommendationBody();
 
         await prisma.recommendation.create({
             data: {

@@ -11,7 +11,7 @@ const agent = supertest(app);
 
 describe("POST /recommendations", () => {
     it("returns 201 for valid input and right insert in the database", async () => {
-        const music = await recommendationFactory.recommendation();
+        const music = await recommendationFactory.recommendationBody();
 
         const result = await agent.post('/recommendations').send(music);
 
@@ -24,7 +24,7 @@ describe("POST /recommendations", () => {
     });
 
     it("returns 409 for using an existing music name in the database", async () => {
-        const music = await recommendationFactory.recommendation();
+        const music = await recommendationFactory.recommendationBody();
 
         await agent.post('/recommendations').send(music);
 
