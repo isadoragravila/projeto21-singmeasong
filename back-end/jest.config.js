@@ -11,5 +11,17 @@ export default {
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
-  verbose: true
+  verbose: true,
+  collectCoverage: true,
+  coveragePathIgnorePatterns: [
+    'node_modules',
+    'test-config',
+    'interfaces',
+    'src/repositories',
+    'jestGlobalMocks.ts',
+    'src/server.ts',
+    'src/utils',
+    'src/database.ts',
+    'tests/factories'
+  ]
 };
