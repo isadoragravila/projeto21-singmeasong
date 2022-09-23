@@ -16,7 +16,7 @@ Cypress.Commands.add('createRecommendation', (URL_BACK) => {
         youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y"
       }
     cy.request('POST', `${URL_BACK}/recommendations`, recommendation);
-})
+});
 
 
 

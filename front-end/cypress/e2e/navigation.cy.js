@@ -6,10 +6,12 @@ beforeEach(async () => {
 });
 
 describe('Navigate between pages', () => {
-  it('should navigate to top page successfully', () => {
-    cy.visit(URL_FRONT);
+  it('should navigate to top page successfully, and have at most 10 recommendations', () => {
+    for (let i = 0; i < 15; i++) {
+      cy.createRecommendation(URL_BACK);
+    }
 
-    cy.createRecommendation(URL_BACK);
+    cy.visit(URL_FRONT);
 
     cy.intercept('GET', `${URL_BACK}/recommendations/top/10`).as('getTopRecommendations');
 
@@ -17,13 +19,17 @@ describe('Navigate between pages', () => {
 
     cy.wait('@getTopRecommendations');
 
-    cy.url().should('equal', `${URL_FRONT}/top`)
+    cy.url().should('equal', `${URL_FRONT}/top`);
+
+    cy.get("[data-cy=title]").should('have.length', 10);
   });
 
-  it('should navigate to random page successfully', () => {
-    cy.visit(URL_FRONT);
+  it('should navigate to random page successfully, and have only 1 recommendation', () => {
+    for (let i = 0; i < 15; i++) {
+      cy.createRecommendation(URL_BACK);
+    }
 
-    cy.createRecommendation(URL_BACK);
+    cy.visit(URL_FRONT);
 
     cy.intercept('GET', `${URL_BACK}/recommendations/random`).as('getRandomRecommendations');
 
@@ -31,13 +37,17 @@ describe('Navigate between pages', () => {
 
     cy.wait('@getRandomRecommendations');
 
-    cy.url().should('equal', `${URL_FRONT}/random`)
+    cy.url().should('equal', `${URL_FRONT}/random`);
+
+    cy.get("[data-cy=title]").should('have.length', 1);
   });
 
-  it('should navigate to home page successfully', () => {
-    cy.visit(URL_FRONT);
+  it('should navigate to home page successfully, and have at most 10 recommendations', () => {
+    for (let i = 0; i < 15; i++) {
+      cy.createRecommendation(URL_BACK);
+    }
 
-    cy.createRecommendation(URL_BACK);
+    cy.visit(URL_FRONT);
 
     cy.intercept('GET', `${URL_BACK}/recommendations`).as('getRecommendations');
 
@@ -45,7 +55,9 @@ describe('Navigate between pages', () => {
 
     cy.wait('@getRecommendations');
 
-    cy.url().should('equal', `${URL_FRONT}/`)
+    cy.url().should('equal', `${URL_FRONT}/`);
+
+    cy.get("[data-cy=title]").should('have.length', 10);
   });
 });
 
