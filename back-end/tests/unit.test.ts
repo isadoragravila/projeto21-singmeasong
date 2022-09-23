@@ -39,7 +39,7 @@ describe('Tests function insert of recommendationService', () => {
 });
 
 describe('Tests function getById of recommendationService', () => {
-    it('Should get the recommendation', async () => {
+    it('Should return the recommendation', async () => {
         const existingRecommendation = await recommendationFactory.recommendationData();
 
         jest.spyOn(recommendationRepository, "find").mockResolvedValueOnce(existingRecommendation);
@@ -49,7 +49,7 @@ describe('Tests function getById of recommendationService', () => {
         expect(result).toMatchObject(existingRecommendation);
     });
 
-    it("Shouldn't find recommendation", async () => {
+    it("Shouldn't find the recommendation", async () => {
         const existingRecommendation = await recommendationFactory.recommendationData();
 
         jest.spyOn(recommendationRepository, "find").mockResolvedValueOnce(null);
@@ -109,5 +109,34 @@ describe('Tests functions upvote and downvote of recommendationService', () => {
         expect(recommendationRepository.updateScore).toBeCalled();
 
         expect(recommendationRepository.remove).toBeCalled();
+    });
+});
+
+describe('Tests function get of recommendationService', () => {
+    it('Should return an array of recommendations', async () => {
+        const recommendation = await recommendationFactory.recommendationData();
+
+        jest.spyOn(recommendationRepository, "findAll").mockResolvedValueOnce([recommendation]);
+
+        const result = await recommendationService.get();
+
+        expect(result).toBeInstanceOf(Array);
+        expect(result[0]).toMatchObject(recommendation);
+        expect(recommendationRepository.findAll).toBeCalled();
+    });
+});
+
+describe('Tests function getTop of recommendationService', () => {
+    it('Should return an array of recommendations', async () => {
+        const recommendation = await recommendationFactory.recommendationData();
+        const amount = 10;
+
+        jest.spyOn(recommendationRepository, "getAmountByScore").mockResolvedValueOnce([recommendation]);
+
+        const result = await recommendationService.getTop(amount);
+
+        expect(result).toBeInstanceOf(Array);
+        expect(result[0]).toMatchObject(recommendation);
+        expect(recommendationRepository.getAmountByScore).toBeCalled();
     });
 });
