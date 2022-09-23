@@ -49,3 +49,17 @@ export async function createTenPlusItems(amount?: number) {
     }
     return
 }
+
+export async function multipleItems(min: number, max: number) {
+    let result = [];
+    for (let i = 0; i < 10; i++) {
+        const item = {
+            id: i,
+            name: `${i} - ${faker.lorem.words(5)}`,
+            youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y",
+            score: Number(faker.finance.amount(min, max, 0))
+        }
+        result.push(item)
+    }
+    return result;
+}

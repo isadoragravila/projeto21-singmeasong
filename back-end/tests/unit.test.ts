@@ -140,3 +140,69 @@ describe('Tests function getTop of recommendationService', () => {
         expect(recommendationRepository.getAmountByScore).toBeCalled();
     });
 });
+
+describe('Tests function getRandom of recommendationService', () => {
+    it('Should return a recommendation with score greater than 10', async () => {
+        const min = 11;
+        const max = 200;
+        const recommendations = await recommendationFactory.multipleItems(min, max);
+        const random = 0.6;
+        const randomIndex = Math.floor(random * recommendations.length);
+
+        jest.spyOn(global.Math, "random").mockReturnValue(random);
+
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce(({score, scoreFilter}): any => recommendations);
+
+        const result = await recommendationService.getRandom();
+
+        expect(result).toMatchObject(recommendations[randomIndex]);
+        expect(recommendationRepository.findAll).toBeCalledTimes(1);
+    });
+
+    it('Should return a recommendation with score less than 10', async () => {
+        const min = -5;
+        const max = 10;
+        const recommendations = await recommendationFactory.multipleItems(min, max);
+        const random = 0.8;
+        const randomIndex = Math.floor(random * recommendations.length);
+
+        jest.spyOn(global.Math, "random").mockReturnValue(random);
+
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce(({score, scoreFilter}): any => recommendations);
+
+        const result = await recommendationService.getRandom();
+
+        expect(result).toMatchObject(recommendations[randomIndex]);
+        expect(recommendationRepository.findAll).toBeCalledTimes(1);
+    });
+
+    it('Should return a recommendation with any score', async () => {
+        const min = -5;
+        const max = 10;
+        const recommendations = await recommendationFactory.multipleItems(min, max);
+        const random = 0.6;
+        const randomIndex = Math.floor(random * recommendations.length);
+
+        jest.spyOn(global.Math, "random").mockReturnValue(random);
+
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce(({score, scoreFilter}): any => []);
+
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => recommendations);
+
+        const result = await recommendationService.getRandom();
+
+        expect(result).toMatchObject(recommendations[randomIndex]);
+        expect(recommendationRepository.findAll).toBeCalledTimes(2);
+    });
+
+    it('Should response with 404 error when there is not a recommendation', async () => {
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce(({score, scoreFilter}): any => []);
+
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => []);
+
+        const result = recommendationService.getRandom();
+
+        await expect(result).rejects.toEqual(notFoundError());
+        expect(recommendationRepository.findAll).toBeCalledTimes(2);
+    });
+});
