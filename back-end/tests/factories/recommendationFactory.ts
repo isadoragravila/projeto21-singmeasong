@@ -13,7 +13,7 @@ export async function recommendationData() {
         id: Number(faker.finance.amount(1, 200, 0)),
         name: faker.lorem.words(5),
         youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y",
-        score: Number(faker.finance.amount(-5, 200, 0))
+        score: 0
     }
 };
 
