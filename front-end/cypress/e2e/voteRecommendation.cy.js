@@ -31,18 +31,12 @@ describe('Vote recommendation', () => {
     
     cy.visit(URL_FRONT);
 
-    cy.get("[data-cy=downvote]").click();
-    cy.wait(500);
-    cy.get("[data-cy=downvote]").click();
-    cy.wait(500);
-    cy.get("[data-cy=downvote]").click();
-    cy.wait(500);
-    cy.get("[data-cy=downvote]").click();
-    cy.wait(500);
-    cy.get("[data-cy=downvote]").click();
-    cy.wait(500);
-    cy.get("[data-cy=downvote]").click();
-    cy.wait(500);
+    cy.intercept('GET', `${URL_BACK}/recommendations`).as('getRecommendations');
+
+    for (let i = 0; i < 6; i++) {
+      cy.get("[data-cy=downvote]").click();
+      cy.wait("@getRecommendations");
+    }
 
     cy.get("[data-cy=emptyRecommendations]").should("be.visible");
   });
