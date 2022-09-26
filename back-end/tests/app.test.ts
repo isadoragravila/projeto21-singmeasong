@@ -112,12 +112,12 @@ describe("GET /recommendations", () => {
 		expect(result.body).toBeInstanceOf(Array);
 		expect(result.body[0]).toMatchObject(createdRecommendation);
 	});
-	it("returns array with length equal to 10", async () => {
+	it("returns array with length less or equal to 10", async () => {
 		await createFactory.createMultipleItems();
 
 		const result = await agent.get("/recommendations");
 
-		expect(result.body.length).toBe(10);
+		expect(result.body.length).toBeLessThanOrEqual(10);
 	});
 });
 

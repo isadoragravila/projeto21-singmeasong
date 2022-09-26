@@ -9,7 +9,7 @@
     "start": "node dist/src/server.js",
     "dev": "dotenv -e .env.test nodemon src/server.ts",
     "prisma": "prisma migrate dev",
-    "test": "dotenv -e .env.test npm run prisma && dotenv -e .env.test -- jest tests/app.test.ts -i --no-cache",
+    "test:integration": "dotenv -e .env.test npm run prisma && dotenv -e .env.test -- jest tests/app.test.ts -i --no-cache",
     "test:unit": "dotenv -e .env.test -- jest tests/unit.test.ts -i --coverage"
   },
   "keywords": [],
