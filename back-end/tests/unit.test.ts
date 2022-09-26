@@ -8,7 +8,7 @@ beforeEach(() => {
 	jest.clearAllMocks();
 });
 
-describe("Tests function insert of recommendationService", () => {
+describe("Tests function 'insert' of recommendationService", () => {
 	it("Should create a new recommendation", async () => {
 		const music = await recommendationFactory.recommendationBody();
 
@@ -37,7 +37,7 @@ describe("Tests function insert of recommendationService", () => {
 	});
 });
 
-describe("Tests function getById of recommendationService", () => {
+describe("Tests function 'getById' of recommendationService", () => {
 	it("Should return the recommendation", async () => {
 		const existingRecommendation = await recommendationFactory.recommendationData();
 
@@ -59,7 +59,7 @@ describe("Tests function getById of recommendationService", () => {
 	});
 });
 
-describe("Tests functions upvote and downvote of recommendationService", () => {
+describe("Tests functions 'upvote' and 'downvote' of recommendationService", () => {
 	it("Should increase score by 1", async () => {
 		const recommendation = await recommendationFactory.recommendationData();
 		const recommendationUpdated = { ...recommendation, score: recommendation.score + 1 };
@@ -111,7 +111,7 @@ describe("Tests functions upvote and downvote of recommendationService", () => {
 	});
 });
 
-describe("Tests function get of recommendationService", () => {
+describe("Tests function 'get' of recommendationService", () => {
 	it("Should return an array of recommendations", async () => {
 		const recommendation = await recommendationFactory.recommendationData();
 
@@ -125,7 +125,7 @@ describe("Tests function get of recommendationService", () => {
 	});
 });
 
-describe("Tests function getTop of recommendationService", () => {
+describe("Tests function 'getTop' of recommendationService", () => {
 	it("Should return an array of recommendations", async () => {
 		const recommendation = await recommendationFactory.recommendationData();
 		const amount = 10;
@@ -140,7 +140,7 @@ describe("Tests function getTop of recommendationService", () => {
 	});
 });
 
-describe("Tests function getRandom of recommendationService", () => {
+describe("Tests function 'getRandom' of recommendationService", () => {
 	it("Should return a recommendation with score greater than 10", async () => {
 		const min = 11;
 		const max = 200;

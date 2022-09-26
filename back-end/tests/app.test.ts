@@ -2,6 +2,7 @@ import app from "../src/app.js";
 import supertest from "supertest";
 import { prisma } from "../src/database";
 import * as recommendationFactory from "./factories/recommendationFactory.js";
+import * as createFactory from "./factories/createFactory.js";
 
 beforeEach(async () => {
 	await prisma.$executeRaw`TRUNCATE recommendations RESTART IDENTITY;`;
@@ -50,7 +51,7 @@ describe("POST /recommendations/:id/upvote", () => {
 	});
 
 	it("returns 200 for success in upvote", async () => {
-		const music = await recommendationFactory.create();
+		const music = await createFactory.create();
 		const { id, score } = music;
 
 		const result = await agent.post(`/recommendations/${id}/upvote`).send({});
@@ -74,7 +75,7 @@ describe("POST /recommendations/:id/downvote", () => {
 	});
 
 	it("returns 200 for success in downvote", async () => {
-		const music = await recommendationFactory.create();
+		const music = await createFactory.create();
 		const { id, score } = music;
 
 		const result = await agent.post(`/recommendations/${id}/downvote`).send({});
@@ -88,7 +89,7 @@ describe("POST /recommendations/:id/downvote", () => {
 	});
 
 	it("returns 200 and delete recommendation when score gets lower then -5", async () => {
-		const music = await recommendationFactory.createWithLowScore();
+		const music = await createFactory.createWithLowScore();
 		const { id } = music;
 
 		const result = await agent.post(`/recommendations/${id}/downvote`).send({});
@@ -104,7 +105,7 @@ describe("POST /recommendations/:id/downvote", () => {
 
 describe("GET /recommendations", () => {
 	it("returns array for success and object in the right format", async () => {
-		const createdRecommendation = await recommendationFactory.create();
+		const createdRecommendation = await createFactory.create();
 
 		const result = await agent.get("/recommendations");
 
@@ -112,7 +113,7 @@ describe("GET /recommendations", () => {
 		expect(result.body[0]).toMatchObject(createdRecommendation);
 	});
 	it("returns array with length equal to 10", async () => {
-		await recommendationFactory.createTenPlusItems();
+		await createFactory.createMultipleItems();
 
 		const result = await agent.get("/recommendations");
 
@@ -128,8 +129,8 @@ describe("GET /recommendations/:id", () => {
 
 		expect(result.status).toBe(404);
 	});
-	it("returns object in the right format for success", async () => {
-		const createdRecommendation = await recommendationFactory.create();
+	it("returns object in the right format", async () => {
+		const createdRecommendation = await createFactory.create();
 
 		const { id } = createdRecommendation;
 
@@ -144,7 +145,7 @@ describe("GET /recommendations/top/:amount", () => {
 	it("returns array with the right amount", async () => {
 		const amount = 5;
 
-		await recommendationFactory.createTenPlusItems(amount);
+		await createFactory.createMultipleItems(amount);
 
 		const result = await agent.get(`/recommendations/top/${amount}`);
 
@@ -155,7 +156,7 @@ describe("GET /recommendations/top/:amount", () => {
 	it("returns array in the descending order", async () => {
 		const amount = 5;
 
-		await recommendationFactory.createTenPlusItems(amount);
+		await createFactory.createMultipleItems(amount);
 
 		const result = await agent.get(`/recommendations/top/${amount}`);
 
@@ -174,7 +175,7 @@ describe("GET /recommendations/random", () => {
 	});
 
 	it("returns object in the right format for success", async () => {
-		const createdRecommendation = await recommendationFactory.create();
+		const createdRecommendation = await createFactory.create();
 
 		const result = await agent.get("/recommendations/random");
 
